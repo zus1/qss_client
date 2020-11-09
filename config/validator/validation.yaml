@@ -1,0 +1,11 @@
+App\Entity\User:
+  properties:
+    email:
+      - NotBlank: ~
+      - Email:
+          message: The email "{{ value }}" is not a valid email.
+    password:
+      - NotBlank: ~
+      - Regex:
+          pattern: '/^[A-Za-z0-9_@.!?:,\;+]+$/i'
+          message: Ivalid characters in password.
