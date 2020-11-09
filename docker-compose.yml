@@ -1,0 +1,17 @@
+version: '3'
+services:
+  client:
+    container_name: qss_client
+    build: .
+    restart: always
+    ports:
+      - '8080:80'
+    links:
+      - memcached
+    volumes:
+      - .:/var/www/html:cached
+  memcached:
+    container_name: qss_memcached
+    image: memcached
+    ports:
+      - '11211:11211'
