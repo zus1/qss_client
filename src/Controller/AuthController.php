@@ -2,19 +2,20 @@
 
 namespace App\Controller;
 
-use App\Api\Qss;
+use App\Api\Auth;
 use App\Entity\User;
+use App\Services\Qss;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AuthController extends AbstractController
+class AuthController extends BaseController
 {
     /**
      * @Route("/login", name="login")
+     * @return Response
      */
     public function login(): Response
     {
@@ -22,14 +23,15 @@ class AuthController extends AbstractController
     }
 
     /**
-     * @Route("/do-login", name="do-login")
+     * @Route("/do-login", name="do_login")
      * @param Request $request
      * @param Qss $qss
+     * @param Auth $auth
      * @param ValidatorInterface $validator
      * @param User $user
      * @return Response
      */
-    public function doLogin(Request $request, Qss $qss, ValidatorInterface $validator, User $user): Response
+    public function doLogin(Request $request, Qss $qss, Auth $auth, ValidatorInterface $validator, User $user): Response
     {
         $email = $request->get("email");
         $password = $request->get("password");
@@ -37,19 +39,12 @@ class AuthController extends AbstractController
         try {
             $this->makeValidation($validator, $user, "email", $email);
             $this->makeValidation($validator, $user, "password", $password);
+            $qss->setCallClass($auth)->authenticateUser($email, $password);
         } catch(Exception $e) {
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('login');
         }
 
-        $res = $qss->login($email, $password);
-        dd($res);
-    }
-
-    private function makeValidation(ValidatorInterface $validator, User $user, string $name, string $value) {
-        $failed = $validator->validatePropertyValue($user, $name, $value);
-        if($failed->count()) {
-            throw new Exception($failed->get(0)->getMessage());
-        }
+        return $this->redirectToRoute('login');
     }
 }

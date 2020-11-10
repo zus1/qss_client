@@ -31,10 +31,22 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Api\Qss:
         autowire: true
+    App\Api\Auth:
+        autowire: true
+    App\Api\Author:
+        autowire: true
+    App\Api\Book:
+        autowire: true
     App\Entity\User:
         autowire: true
     App\Entity\Author:
         autowire: true
     App\Entity\Book:
+        autowire: true
+    App\Dto\ApiException:
+        autowire: true
+    App\Services\Package:
+        autowire: true
+    App\Services\Isbn:
         autowire: true
 

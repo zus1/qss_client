@@ -4,16 +4,17 @@
 namespace App\Api;
 
 
+use App\Dto\ApiException;
 use App\Services\Env;
+use App\Services\Package;
 use Exception;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
-class Call
+abstract class Call
 {
-
     const METHOD_GET = "GET";
     const METHOD_POST = "POST";
     const METHOD_PUT = "PUT";
@@ -21,16 +22,18 @@ class Call
 
     private $client;
     protected $env;
+    protected $package;
 
     private $postAsForm = false;
     private $nonJson = false;
     protected $headers = array(
-        "Accept" => "application/json"
+        "Content-Type" => "application/json"
     );
 
-    public function __construct(HttpClientInterface $client) {
+    public function __construct(HttpClientInterface $client, Package $package) {
         $this->client = $client;
         $this->env = Env::load();
+        $this->package = $package;
     }
 
     protected function setPostAsForm() {
@@ -127,5 +130,12 @@ class Call
         }
 
         return array("error" => 1, "message" => "Api error", "code" => $httpCode);
+    }
+
+    protected function getExceptionDto(array $response) {
+        $dto = new ApiException();
+        $dto->setMessage($response["message"]);
+        $dto->setCode($response["code"]);
+        return $dto;
     }
 }

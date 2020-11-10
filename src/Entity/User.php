@@ -5,10 +5,42 @@ namespace App\Entity;
 
 class User
 {
+    private String $name;
+    private String $lName;
     private String $email;
-    private String $password;
     private String $token;
-    private String $expires;
+
+    /**
+     * @return String
+     */
+    public function getName(): String
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param String $name
+     */
+    public function setName(String $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return String
+     */
+    public function getLName(): String
+    {
+        return $this->lName;
+    }
+
+    /**
+     * @param String $lName
+     */
+    public function setLName(String $lName): void
+    {
+        $this->lName = $lName;
+    }
 
     /**
      * @return String
@@ -26,21 +58,6 @@ class User
         $this->email = $email;
     }
 
-    /**
-     * @return String
-     */
-    public function getPassword(): String
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param String $password
-     */
-    public function setPassword(String $password): void
-    {
-        $this->password = $password;
-    }
 
     /**
      * @return String
@@ -57,22 +74,4 @@ class User
     {
         $this->token = $token;
     }
-
-    /**
-     * @return String
-     */
-    public function getExpires(): String
-    {
-        return $this->expires;
-    }
-
-    /**
-     * @param String $expires
-     */
-    public function setExpires(String $expires): void
-    {
-        $this->expires = $expires;
-    }
-
-
 }
