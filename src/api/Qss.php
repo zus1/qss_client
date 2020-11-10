@@ -12,9 +12,8 @@ class Qss extends Call
     }
 
     protected function callQss(string $url, ?array $params=array(), ?string $method=self::METHOD_GET) {
-        //$apiKey = $this->getApiKey();
-        //$this->addHeader("Authorization", "Bearer " . $apiKey);
-        $this->addHeader("Authorization", "Bearer ef26fee3f2cda643deed0060a07135882a11aacf");
+        $apiKey = $this->getApiKey();
+        $this->addHeader("Authorization", "Bearer " . $apiKey);
         return $this->callApi($url, $params, $method);
     }
 
