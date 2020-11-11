@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services;
+namespace App\Service;
 
 use App\Entity\Author;
 use App\Entity\Book;
@@ -76,6 +76,9 @@ class Package
         $book->setIsbn($bookArr["isbn"]);
         $book->setReleaseDate($bookArr["release_date"]);
         $book->setNumOfPages($bookArr["number_of_pages"]);
+        if(isset($bookArr["description"])) {
+            $book->setDescription($bookArr["description"]);
+        }
         return $book;
     }
 

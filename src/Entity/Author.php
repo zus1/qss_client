@@ -79,7 +79,7 @@ class Author
     public function setBirthDay(String $birthDay): void
     {
         $dt = new DateTime($birthDay);
-        $this->birthDay = $dt->format("Y-m-d H:i:s");
+        $this->birthDay = $dt->format("Y-m-d");
     }
 
     /**
@@ -135,6 +135,9 @@ class Author
      */
     public function getNumberOfBooks(): int
     {
+        if(empty($this->numberOfBooks)) {
+            return 0;
+        }
         return $this->numberOfBooks;
     }
 

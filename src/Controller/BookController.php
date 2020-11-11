@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Api\Author;
 use App\Api\Book;
-use App\Services\Env;
-use App\Services\Isbn;
-use App\Services\Qss;
+use App\Service\Env;
+use App\Service\Isbn;
+use App\Service\Qss;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class BookController extends BaseController
 {
     /**
-     * @Route("/book", name="book")
+     * @Route("/book-add", name="book_add")
      * @param Qss $qss
      * @param Author $author
      * @param Isbn $isbn
@@ -31,17 +31,17 @@ class BookController extends BaseController
         try {
             $authors = $qss->setCallClass($author)->authors();
         } catch(Exception $e) {
-            $this->addFlash('error', $e->getMessage());
+            $this->addFlash('warning', $e->getMessage());
         }
 
         return $this->render('book/add.html.twig', [
             'authors' => $authors,
-            'isbn' => $isbnArr
+            'isbns' => $isbnArr
         ]);
     }
 
     /**
-     * @Route("/book-add", name="book-add")
+     * @Route("/book-do-add", name="book_do_add")
      * @param Request $request
      * @param Qss $qss
      * @param Book $bookApi
@@ -49,17 +49,23 @@ class BookController extends BaseController
      * @return RedirectResponse
      */
     public function doAddBook(Request $request, Qss $qss, Book $bookApi, ValidatorInterface $validator) : RedirectResponse {
-        $authorId = $request->request->get("author_id");
-        $title = $request->request->get("title");
-        $releaseDate = $request->request->get("release_date");
-        $isbn = $request->request->get("isbn");
-        $format = $request->request->get("format");
-        $numPages = $request->request->get("num_of_pages");
-        $description = $request->request->get("description");
+        $title = $request->get("title");
+        $releaseDate = $request->get("release_date");
+        $format = $request->get("format");
+        $numPages = $request->get("num_of_pages");
+        $description = $request->get("description");
 
         $bookEntity = new \App\Entity\Book();
 
         try {
+            if(!$request->request->has("author_id")) {
+                throw new Exception("Author is required");
+            }
+            $authorId = $request->get("author_id");
+            if(!$request->request->has("isbn")) {
+                throw new Exception("ISBN is required");
+            }
+            $isbn = $request->get("isbn");
             $this->makeValidation($validator, new \App\Entity\Author(), "id", $authorId);
             $this->makeValidation($validator, $bookEntity, "title", $title);
             $this->makeValidation($validator, $bookEntity, "releaseDate", $releaseDate);
@@ -77,16 +83,16 @@ class BookController extends BaseController
 
             $qss->setCallClass($bookApi)->bookAdd($authorId, $bookEntity);
         } catch(Exception $e) {
-            $this->addFlash('error', $e->getMessage());
-            return $this->redirectToRoute('book');
+            $this->addFlash('warning', $e->getMessage());
+            return $this->redirectToRoute('book_add');
         }
 
         $this->addFlash('success', "Book Added");
-        return $this->redirectToRoute('book');
+        return $this->redirectToRoute('book_add');
     }
 
     /**
-     * @Route("/author/{bookId}", name="author")
+     * @Route("/book-delete/author/{authorId}/book/{bookId}", name="book_delete")
      * @param int $bookId
      * @param int $authorId
      * @param Qss $qss
@@ -103,6 +109,6 @@ class BookController extends BaseController
             return new JsonResponse(['error' => 1, "message" => $e->getMessage()]);
         }
 
-        return new JsonResponse(['error' => 0, "message" => "Book deleted"]);
+        return new JsonResponse(['error' => 0, "message" => "Book deleted", "book_id" => $bookId]);
     }
 }

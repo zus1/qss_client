@@ -45,8 +45,7 @@ services:
         autowire: true
     App\Dto\ApiException:
         autowire: true
-    App\Services\Package:
-        autowire: true
-    App\Services\Isbn:
-        autowire: true
+    App\EventListener\RequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
 

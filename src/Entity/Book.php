@@ -63,7 +63,7 @@ class Book
     public function setReleaseDate(String $releaseDate): void
     {
         $dt = new DateTime($releaseDate);
-        $this->releaseDate = $dt->format("Y-m-d H:i:s");
+        $this->releaseDate = $dt->format("Y-m-d");
     }
 
     /**
@@ -119,6 +119,9 @@ class Book
      */
     public function getDescription(): string
     {
+        if(empty($this->description)) {
+            return "";
+        }
         return $this->description;
     }
 

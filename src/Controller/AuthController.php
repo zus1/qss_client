@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Api\Auth;
 use App\Entity\User;
-use App\Services\Qss;
+use App\Service\Authentication;
+use App\Service\Qss;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,8 +43,22 @@ class AuthController extends BaseController
             $this->makeValidation($validator, $user, "password", $password);
             $qss->setCallClass($auth)->authenticateUser($email, $password);
         } catch(Exception $e) {
-            $this->addFlash('error', $e->getMessage());
+            $this->addFlash('warning', $e->getMessage());
             return $this->redirectToRoute('login');
+        }
+
+        return $this->redirectToRoute('author_list');
+    }
+
+    /**
+     * @Route("/logout", name="logout")
+     * @param Authentication $auth
+     * @return RedirectResponse
+     */
+    public function logout(Authentication $auth) {
+        $authenticated = $auth->isAuthenticated();
+        if($authenticated === true) {
+            $auth->logout();
         }
 
         return $this->redirectToRoute('login');

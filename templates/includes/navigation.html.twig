@@ -1,0 +1,8 @@
+<div id="top-nav" class="nav-top">
+    <ul>
+        <li><a href="{{ path('author_list') }}">Authors</a></li>
+        <li><a href="{{ path('book_add') }}">Add Book</a></li>
+        <li>{{ auth.authenticatedUserName }}&nbsp;{{ auth.authenticatedUserLastName }}</li>
+        <li><a href="{{ path('logout') }}">Logout</a></li>
+    </ul>
+</div>

@@ -5,9 +5,10 @@ namespace App\Api;
 
 
 use App\Dto\ApiException;
-use App\Services\Env;
-use App\Services\Package;
+use App\Service\Env;
+use App\Service\Package;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;

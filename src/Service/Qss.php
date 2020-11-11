@@ -1,16 +1,22 @@
 <?php
 
-namespace App\Services;
+namespace App\Service;
 
 use App\Api\Call;
 use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\User;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Qss
 {
     private $call;
+    private $session;
+
+    public function __construct(SessionInterface $session) {
+        $this->session = $session;
+    }
 
     public function setCallClass(Call $call) {
         $this->call = $call;
@@ -24,14 +30,15 @@ class Qss
      * @throws Exception
      */
     public function authenticateUser(string $email, string $password) {
-        $user = Cache::load()->get(Cache::USER_CACHE_KEY, array());
+        $user = Cache::load()->get(Cache::USER_CACHE_KEY, array("email" => $email));
         if(!empty($user)) {
             throw new Exception("Already logged in");
         }
 
         $user = $this->call->login($email, $password);
 
-        Cache::load()->set(Cache::USER_CACHE_KEY, $user, array(), (int)Env::load()->get("QSS_USER_TTL_MIN", 60) *60);
+        $this->session->set("user_email", $email);
+        Cache::load()->set(Cache::USER_CACHE_KEY, $user, array("email" => $email), (int)Env::load()->get("QSS_USER_TTL_MIN", 60) *60);
 
         return $user;
     }
@@ -43,7 +50,6 @@ class Qss
         }
 
         $authors = $this->call->getAuthors();
-
         Cache::load()->set(Cache::AUTHORS_CACHE_KEY, $authors, array(), (int)Env::load()->get("QSS_AUTHORS_TTL_MIN", 10) *60);
 
         return $authors;

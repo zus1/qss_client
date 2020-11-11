@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Authors{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-mod-8 col-log-8 col-sm-8">
+                {% for message in app.flashes('warning') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% if authors|length == 0 %}
+                    No authors found
+                {% else %}
+                    <table id="authors-table" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Birthday</th>
+                            <th>Gender</th>
+                            <th>Books</th>
+                            <th>Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for author in authors %}
+                            <tr id="row-{{ author.id }}">
+                                <td>{{ author.name }}</td>
+                                <td>{{ author.lName }}</td>
+                                <td>{{ author.birthDay }}</td>
+                                <td>{{ author.gender }}</td>
+                                <td>{{ author.numberOfBooks }}</td>
+                                <td>
+                                    <a href="{{ path('author_preview', { authorId: author.id }) }}" target="_blank" class="btn btn-outline-secondary">Preview</a>
+                                    {% if author.numberOfBooks == 0 %}
+                                        <button type="button" class="btn btn-outline-secondary" id="delete-author-{{ author.id }}" onclick="deleteAuthor(this.id)">Delete</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/ajax.js') }}"></script>
+    <script src="{{ asset('js/notification.js') }}"></script>
+    <script src="{{ asset('js/list.js') }}"></script>
+{% endblock %}

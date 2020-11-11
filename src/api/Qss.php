@@ -2,11 +2,20 @@
 
 namespace App\Api;
 
-use App\Services\Cache;
+use App\Service\Authentication;
+use App\Service\Package;
 use Exception;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Qss extends Call
 {
+    protected $authentication;
+
+    public function __construct(HttpClientInterface $client, Package $package, Authentication $auth) {
+        $this->authentication = $auth;
+        parent::__construct($client, $package);
+    }
+
     protected function getBaseUrl() {
         return $this->env->get("QSS_BASE", "https://symfony-skeleton.q-tests.com");
     }
@@ -18,11 +27,15 @@ class Qss extends Call
     }
 
     protected function getApiKey() {
-        $cachedUser = Cache::load()->get(Cache::USER_CACHE_KEY);
-        if(!$cachedUser) {
+        if(!$this->authentication->isAuthenticated()) {
             throw new Exception("Not logged in");
         }
-        return $cachedUser->getToken();
+        $authenticatedUser = $this->authentication->getAuthenticatedUser();
+        /*$cachedUser = Cache::load()->get(Cache::USER_CACHE_KEY, array("email" => $userEmail));
+        if(!$cachedUser) {
+            throw new Exception("Not logged in");
+        }*/
+        return $authenticatedUser->getToken();
     }
 
     protected function handleError(array $response) {

@@ -2,7 +2,7 @@
 
 namespace App\Api;
 
-use App\Services\Package;
+use App\Service\Package;
 
 class Author extends Qss
 {

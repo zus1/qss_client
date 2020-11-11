@@ -5,10 +5,11 @@ namespace App\Entity;
 
 class User
 {
-    private String $name;
-    private String $lName;
-    private String $email;
-    private String $token;
+    private string $name;
+    private string $lName;
+    private string $email;
+    private string $token;
+    private string $password;
 
     /**
      * @return String
@@ -73,5 +74,21 @@ class User
     public function setToken(String $token): void
     {
         $this->token = $token;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 }
