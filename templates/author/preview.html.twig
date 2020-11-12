@@ -5,81 +5,94 @@
 {% block body %}
     <div class="row">
         <div class="col-mod-6 col-log-6 col-sm-6 offset-md-1 offset-lg-1 offset-sm-1">
-            {% for message in app.flashes('warning') %}
-                <div class="alert alert-danger">
-                    {{ message }}
+            <div class="content-wrapper">
+                <div class="content-title">
+                    Books
                 </div>
-            {% endfor %}
-            {% if books|length == 0 %}
-                No books found
-            {% else %}
-                <table id="books-table" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Released</th>
-                            <th>ISBN</th>
-                            <th>Format</th>
-                            <th>Pages num.</th>
-                            <th>Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for book in books %}
-                        <tr id="row-{{ book.id }}">
-                            <td>{{ book.title }}</td>
-                            <td>{{ book.releaseDate }}</td>
-                            <td>{{ book.isbn }}</td>
-                            <td>{{ book.format }}</td>
-                            <td>{{ book.numOfPages }}</td>
-                            <td>
-                                <button type="button" class="btn btn-secondary" id="delete-book-{{ book.id }}" onclick="deleteBook(this.id)">Delete</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
+                {% for message in app.flashes('warning') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% if books|length == 0 %}
+                    No books found
+                {% else %}
+                    <div class="example-box">
+                        <table id="books-table" style="width: 100%">
+                            <thead style="background-color: #1b1e21">
+                            <tr>
+                                <th>Title</th>
+                                <th>Released</th>
+                                <th>ISBN</th>
+                                <th>Format</th>
+                                <th>Pages num.</th>
+                                <th>Options</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for book in books %}
+                                <tr id="row-{{ book.id }}">
+                                    <td>{{ book.title }}</td>
+                                    <td>{{ book.releaseDate }}</td>
+                                    <td>{{ book.isbn }}</td>
+                                    <td>{{ book.format }}</td>
+                                    <td>{{ book.numOfPages }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-secondary" id="delete-book-{{ book.id }}" onclick="deleteBook(this.id)">Delete</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-        <div class="col-md-3 col-lg-3 col-sm-3 offset-md-1 offset-lg-1 offset-sm-1">
+        <div class="col-md-3 col-lg-3 col-sm-3">
             <input type="hidden" id="author_id" value="{{ author.id }}">
-            <h4>About author</h4>
-            <div class="row">
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    First name:
+            <div class="content-wrapper">
+                <div class="content-title">
+                    About author
                 </div>
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    {{ author.name }}
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        First name:
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        {{ author.name }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        Last name:
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        {{ author.lName }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        Birthday:
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        {{ author.birthDay }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        Gender:
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        {{ author.gender }}
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    Last name:
+            <div class="content-wrapper">
+                <div class="content-title">
+                    Biography
                 </div>
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    {{ author.lName }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    Birthday:
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    {{ author.birthDay }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    Gender:
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-12">
-                    {{ author.gender }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-12 col-sm-12">
-                    <h4>Biography</h4>
-                    <p>{{ author.biography }}</p>
+                <div class="example-box">
+                    {{ author.biography }}
                 </div>
             </div>
         </div>

@@ -34,4 +34,14 @@ class Author extends Qss
 
         return null;
     }
+
+    public function addAuthor(\App\Entity\Author $author) {
+        $author = $author->toArray();
+        $endpoint = $this->env->get("QSS_AUTHOR_ADD", "/api/v2/authors");
+        $url = $this->getBaseUrl() . $endpoint;
+        $response = $this->callQss($url, $author, self::METHOD_POST);
+        $this->handleError($response);
+
+        return null;
+    }
 }

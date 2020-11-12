@@ -21,7 +21,7 @@ class Qss extends Call
     }
 
     protected function callQss(string $url, ?array $params=array(), ?string $method=self::METHOD_GET) {
-        $apiKey = $this->getApiKey();
+        $apiKey = (empty($this->tokenOverride))? $this->getApiKey() : $this->tokenOverride;
         $this->addHeader("Authorization", "Bearer " . $apiKey);
         return $this->callApi($url, $params, $method);
     }
@@ -31,10 +31,6 @@ class Qss extends Call
             throw new Exception("Not logged in");
         }
         $authenticatedUser = $this->authentication->getAuthenticatedUser();
-        /*$cachedUser = Cache::load()->get(Cache::USER_CACHE_KEY, array("email" => $userEmail));
-        if(!$cachedUser) {
-            throw new Exception("Not logged in");
-        }*/
         return $authenticatedUser->getToken();
     }
 

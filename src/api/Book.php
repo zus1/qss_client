@@ -7,8 +7,6 @@ class Book extends Qss
     public function addBook(int $authorId, \App\Entity\Book $book) {
         $book = $book->toArray();
         $book["author"] = array("id" => $authorId);
-        //$params = array($book);
-        //dd($book);
         $endpoint = $this->env->get("QSS_BOOK_ADD", "/api/v2/books");
         $url = $this->getBaseUrl() . $endpoint;
         $response = $this->callQss($url, $book, self::METHOD_POST);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Service;
 
@@ -38,7 +39,7 @@ class Qss
         $user = $this->call->login($email, $password);
 
         $this->session->set("user_email", $email);
-        Cache::load()->set(Cache::USER_CACHE_KEY, $user, array("email" => $email), (int)Env::load()->get("QSS_USER_TTL_MIN", 60) *60);
+        Cache::load()->set(Cache::USER_CACHE_KEY, $user, array("email" => $email), (int)Env::load()->get("QSS_USER_TTL_MIN", "60") *60);
 
         return $user;
     }
@@ -50,7 +51,7 @@ class Qss
         }
 
         $authors = $this->call->getAuthors();
-        Cache::load()->set(Cache::AUTHORS_CACHE_KEY, $authors, array(), (int)Env::load()->get("QSS_AUTHORS_TTL_MIN", 10) *60);
+        Cache::load()->set(Cache::AUTHORS_CACHE_KEY, $authors, array(), (int)Env::load()->get("QSS_AUTHORS_TTL_MIN", "10") *60);
 
         return $authors;
     }
@@ -63,13 +64,18 @@ class Qss
 
         $authorWithBooks = $this->call->getAuthorWithBooks($authorId);
 
-        Cache::load()->set(Cache::AUTHOR_BOOKS_CACHE_KEY, $authorWithBooks, array("author_id" => $authorId), (int)Env::load()->get("QSS_AUTHOR_WITH_BOOKS_TTL_MIN", 10) *60);
+        Cache::load()->set(Cache::AUTHOR_BOOKS_CACHE_KEY, $authorWithBooks, array("author_id" => $authorId), (int)Env::load()->get("QSS_AUTHOR_WITH_BOOKS_TTL_MIN", "10") *60);
 
         return $authorWithBooks;
     }
 
     public function authorDelete(int $authorId) {
         $this->call->deleteAuthor($authorId);
+        Cache::load()->delete(Cache::AUTHORS_CACHE_KEY);
+    }
+
+    public function authorAdd(Author $author) {
+        $this->call->addAuthor($author);
         Cache::load()->delete(Cache::AUTHORS_CACHE_KEY);
     }
 

@@ -24,6 +24,7 @@ abstract class Call
     private $client;
     protected $env;
     protected $package;
+    protected $tokenOverride = "";
 
     private $postAsForm = false;
     private $nonJson = false;
@@ -35,6 +36,10 @@ abstract class Call
         $this->client = $client;
         $this->env = Env::load();
         $this->package = $package;
+    }
+
+    public function setTokenOverride(string $override) {
+        $this->tokenOverride = $override;
     }
 
     protected function setPostAsForm() {

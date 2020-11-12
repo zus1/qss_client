@@ -43,9 +43,13 @@ class RequestListener
         array_walk($blackListed, function (string $route) use($requestRoute, $event, $redirectRoute) {
             if($route === $requestRoute) {
                 $url = $this->urlGenerator->generate($redirectRoute);
-                $response = new RedirectResponse($url);
-                $event->setResponse($response);
+                $this->addResponse($event, $url);
             }
         });
+    }
+
+    private function addResponse(RequestEvent $event, string $url) {
+        $response = new RedirectResponse($url);
+        $event->setResponse($response);
     }
 }

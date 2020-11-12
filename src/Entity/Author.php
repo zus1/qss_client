@@ -1,8 +1,10 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Exception;
 
 class Author
@@ -147,5 +149,19 @@ class Author
     public function setNumberOfBooks(int $numberOfBooks): void
     {
         $this->numberOfBooks = $numberOfBooks;
+    }
+
+    public function toArray() {
+        $array = array(
+            'first_name' => $this->getName(),
+            'last_name' => $this->getLName(),
+            'gender' => $this->getGender(),
+            "place_of_birth" => $this->getPlaceOfBirth(),
+            "biography" => $this->getBiography(),
+        );
+        $dt = new DateTime($this->birthDay);
+        $array["birthday"] = $dt->format(DateTimeInterface::RFC3339_EXTENDED);
+
+        return $array;
     }
 }

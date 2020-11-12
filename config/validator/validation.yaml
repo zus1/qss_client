@@ -30,7 +30,8 @@ App\Entity\Author:
           message: Last name can only contain latters.
     birthDay:
       - NotBlank: ~
-      - DateTime: ~
+      - Date:
+          message: Birthday must be valid date
     biography:
       - Regex:
           pattern: '/^[A-Za-z0-9!\?\;.:, ]+$/i'

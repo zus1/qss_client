@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Controller;
 
@@ -25,7 +26,7 @@ class BookController extends BaseController
      * @return Response
      */
     public function addBook(Qss $qss, Author $author, Isbn $isbn) : Response {
-        $isbnToGenerate = (int)Env::load()->get("ISBN_GENERATE_NUM", 10);
+        $isbnToGenerate = (int)Env::load()->get("ISBN_GENERATE_NUM", "10");
         $isbnArr = $isbn->generate($isbnToGenerate);
         $authors = array();
         try {
@@ -52,7 +53,7 @@ class BookController extends BaseController
         $title = $request->get("title");
         $releaseDate = $request->get("release_date");
         $format = $request->get("format");
-        $numPages = $request->get("num_of_pages");
+        $numPages = (int)$request->get("num_of_pages");
         $description = $request->get("description");
 
         $bookEntity = new \App\Entity\Book();
@@ -61,7 +62,7 @@ class BookController extends BaseController
             if(!$request->request->has("author_id")) {
                 throw new Exception("Author is required");
             }
-            $authorId = $request->get("author_id");
+            $authorId = (int)$request->get("author_id");
             if(!$request->request->has("isbn")) {
                 throw new Exception("ISBN is required");
             }
