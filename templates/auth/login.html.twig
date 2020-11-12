@@ -1,0 +1,33 @@
+{% extends 'base_login.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-6 offset-md-3 offset-lg-3 offset-sm-3">
+                <div class="content-wrapper-login">
+                    <div class="title">
+                        Login
+                    </div>
+                    {% for message in app.flashes('warning') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <form action="{{ path('do_login') }}" method="post">
+                        <div class="form-group">
+                            <input type="text" name="email" class="form-control" placeholder="email">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="password" class="form-control" placeholder="password" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="login-button" value="Login">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

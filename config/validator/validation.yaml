@@ -1,0 +1,82 @@
+App\Entity\User:
+  properties:
+    email:
+      - NotBlank:
+          message: Email is required
+      - Email:
+          message: The email "{{ value }}" is not a valid email.
+    password:
+      - NotBlank:
+          message: Password is required
+      - Regex:
+          pattern: '/^[A-Za-z0-9_@.!?:,\;+]+$/i'
+          message: Ivalid characters in password.
+App\Entity\Author:
+  properties:
+    id:
+      - NotBlank: ~
+      - Regex:
+          pattern: '/^[0-9]+$/i'
+          message: Id must be a number.
+    name:
+      - NotBlank: ~
+      - Regex:
+          pattern: '/^[A-Za-z]+$/i'
+          message: Name can only contain latters.
+    lName:
+      - NotBlank: ~
+      - Regex:
+          pattern: '/^[A-Za-z]+$/i'
+          message: Last name can only contain latters.
+    birthDay:
+      - NotBlank: ~
+      - Date:
+          message: Birthday must be valid date
+    biography:
+      - Regex:
+          pattern: '/^[A-Za-z0-9!\?\;.:, ]+$/i'
+          message: Biography contains invalid characters.
+    gender:
+      - NotBlank: ~
+      - Regex:
+          pattern: '/^[A-Za-z]+$/i'
+          message: Gender can contain only latters.
+    placeOfBirth:
+      - NotBlank: ~
+      - Regex:
+          pattern: '/^[A-Za-z ]+$/i'
+          message: Plac of birth can contain only latters and spaces.
+App\Entity\Book:
+  properties:
+    id:
+      - NotBlank: ~
+      - Regex:
+          pattern: '/^[0-9]+$/i'
+          message: Id must be a number.
+    title:
+      - NotBlank:
+          message: Title is required
+      - Regex:
+          pattern: '/^[A-Za-z0-9 ]+$/i'
+          message: Title can only contain latters, numbers and spaces.
+    releaseDate:
+      - Date:
+          message: Release date is not valid date
+    isbn:
+      - NotBlank:
+          message: Isbn is required
+      - Regex:
+          pattern: '/^[0-9]+$/i'
+          message: Isbn can only contain only numbers.
+    format:
+      - Regex:
+          pattern: '/^[0-9x. ]+$/i'
+          message: Format is invalid.
+    numOfPages:
+      - Regex:
+          pattern: '/^[0-9]+$/i'
+          message: Number of pages must be a number.
+    description:
+      - Regex:
+          pattern: '/^[A-Za-z0-9!\?\;.:, ]+$/i'
+          message: Description contains invalid characters.

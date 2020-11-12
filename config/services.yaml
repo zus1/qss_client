@@ -29,3 +29,23 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Api\Qss:
+        autowire: true
+    App\Api\Auth:
+        autowire: true
+    App\Api\Author:
+        autowire: true
+    App\Api\Book:
+        autowire: true
+    App\Entity\User:
+        autowire: true
+    App\Entity\Author:
+        autowire: true
+    App\Entity\Book:
+        autowire: true
+    App\Dto\ApiException:
+        autowire: true
+    App\EventListener\RequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+
