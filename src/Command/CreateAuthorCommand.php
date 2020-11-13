@@ -8,6 +8,7 @@ use App\Service\Cache;
 use App\Service\Qss;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -27,12 +28,23 @@ class CreateAuthorCommand extends Command
     }
 
     protected function configure() {
-
+        $this->addOption('memcached', null, InputOption::VALUE_OPTIONAL, 'Is memcached living and breathing?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        if($input->getOption('memcached')) {
+            if(extension_loaded("memcached")) {
+                $io->success('You got it"');
+                return Command::SUCCESS;
+            } else {
+                $io->error("Swing and miss! Install memcached php extension to swing a home run!");
+                return Command::FAILURE;
+            }
+        }
+
         $io->title('Creating a new author for qss');
 
         $io->section("Logged user check");

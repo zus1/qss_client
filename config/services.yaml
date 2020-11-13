@@ -43,8 +43,6 @@ services:
         autowire: true
     App\Entity\Book:
         autowire: true
-    App\Dto\ApiException:
-        autowire: true
     App\EventListener\RequestListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }

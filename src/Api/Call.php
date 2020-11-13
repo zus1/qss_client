@@ -1,14 +1,11 @@
 <?php
 
-
 namespace App\Api;
 
-
-use App\Dto\ApiException;
 use App\Service\Env;
 use App\Service\Package;
 use Exception;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -24,6 +21,7 @@ abstract class Call
     private $client;
     protected $env;
     protected $package;
+    protected $logger;
     protected $tokenOverride = "";
 
     private $postAsForm = false;
@@ -32,10 +30,11 @@ abstract class Call
         "Content-Type" => "application/json"
     );
 
-    public function __construct(HttpClientInterface $client, Package $package) {
+    public function __construct(HttpClientInterface $client, Package $package, LoggerInterface $logger) {
         $this->client = $client;
         $this->env = Env::load();
         $this->package = $package;
+        $this->logger = $logger;
     }
 
     public function setTokenOverride(string $override) {
@@ -115,33 +114,32 @@ abstract class Call
             $decoded = ($this->nonJson === false)? $response->toArray() : $response->getContent();
             $httpCode = $response->getStatusCode();
         } catch(Throwable $e) {
-            return array("error" => 1, "message" => $e->getMessage(), "code" => $e->getCode());
+            return $this->returnError($e->getCode(), $e->getMessage());
         }
 
 
         if($httpCode === 200) {
             return $decoded;
         }
-        return array("error" => 1, "message" => "Api error", "code" => $httpCode);
+
+        return $this->returnError((int)$httpCode, "Api error");
     }
 
     protected function processDeleteCallResult(ResponseInterface $response) {
         try {
             $httpCode = $response->getStatusCode();
         } catch(Throwable $e) {
-            return array("error" => 1, "message" => $e->getMessage(), "code" => $e->getCode());
+            return $this->returnError($e->getCode(), $e->getMessage());
         }
         if($httpCode === 204) {
             return array("error" => 0, "message" => "ok");
         }
 
-        return array("error" => 1, "message" => "Api error", "code" => $httpCode);
+        return $this->returnError((int)$httpCode, "Api error");
     }
 
-    protected function getExceptionDto(array $response) {
-        $dto = new ApiException();
-        $dto->setMessage($response["message"]);
-        $dto->setCode($response["code"]);
-        return $dto;
+    private function returnError(int $httpCode, string $message) {
+        $this->logger->error(sprintf("%s: %s", $message, $httpCode));
+        return array("error" => 1, "message" => $message, "code" => $httpCode);
     }
 }

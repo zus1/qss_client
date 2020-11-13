@@ -5,15 +5,16 @@ namespace App\Api;
 use App\Service\Authentication;
 use App\Service\Package;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Qss extends Call
 {
     protected $authentication;
 
-    public function __construct(HttpClientInterface $client, Package $package, Authentication $auth) {
+    public function __construct(HttpClientInterface $client, Package $package, Authentication $auth, LoggerInterface $logger) {
         $this->authentication = $auth;
-        parent::__construct($client, $package);
+        parent::__construct($client, $package, $logger);
     }
 
     protected function getBaseUrl() {
