@@ -26,6 +26,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
 RUN chmod a+x /usr/local/bin/symfony
 RUN composer update
+RUN chown www-data:www-data -R /var/www/html
 ADD ./.conf/vhost.conf /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite && \
     service apache2 restart
