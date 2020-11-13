@@ -24,10 +24,10 @@ Now, only thing left to do is start symfony server
 <pre><code>symfony server:start -d</code></pre>
 That's it, project now should be available at localhost:8000
 <br><br>
-<bThird method></b>
+<b>Third method</b>
 <br>
 And last ist the simplest one. But it suitable only for production environments. It utilizes composer, instructions how to do so
-can be found on qss client composer repository.
+can be found on <a href="https://github.com/zus1/qss_client-compose">qss client composer</a> repository.
 <br><br>
 <h3>Running commands</h3>
 Project uses symfony cli command to create new author. To run this command first bash into qss_client container
