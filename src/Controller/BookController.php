@@ -53,7 +53,7 @@ class BookController extends BaseController
         $title = $request->get("title");
         $releaseDate = $request->get("release_date");
         $format = $request->get("format");
-        $numPages = (int)$request->get("num_of_pages");
+        $numPages = $request->get("num_of_pages");
         $description = $request->get("description");
 
         $bookEntity = new \App\Entity\Book();
@@ -79,7 +79,7 @@ class BookController extends BaseController
             $bookEntity->setReleaseDate($releaseDate);
             $bookEntity->setIsbn($isbn);
             $bookEntity->setFormat($format);
-            $bookEntity->setNumOfPages($numPages);
+            $bookEntity->setNumOfPages((int)$numPages);
             $bookEntity->setDescription($description);
 
             $qss->setCallClass($bookApi)->bookAdd($authorId, $bookEntity);
@@ -98,13 +98,10 @@ class BookController extends BaseController
      * @param int $authorId
      * @param Qss $qss
      * @param Book $bookApi
-     * @param ValidatorInterface $validator
      * @return JsonResponse
      */
-    public function ajaxDeleteBook(int $bookId, int $authorId, Qss $qss, Book $bookApi, ValidatorInterface $validator) : JsonResponse {
+    public function ajaxDeleteBook(int $bookId, int $authorId, Qss $qss, Book $bookApi) : JsonResponse {
         try {
-            $this->makeValidation($validator, new \App\Entity\Book(), "id", $bookId);
-            $this->makeValidation($validator, new \App\Entity\Author(), "id", $authorId);
             $qss->setCallClass($bookApi)->bookDelete($bookId, $authorId);
         } catch (Exception $e) {
             return new JsonResponse(['error' => 1, "message" => $e->getMessage()]);

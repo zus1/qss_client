@@ -18,6 +18,9 @@ abstract class Call
     const METHOD_PUT = "PUT";
     const METHOD_DELETE = "DELETE";
 
+    public static $_mock = false;
+    public static $_mockedCallResponses = array(); //will be used in unit test, for mocking api calls
+
     private $client;
     protected $env;
     protected $package;
@@ -90,6 +93,9 @@ abstract class Call
         }
         $optionsArray["headers"] = $this->headers;
 
+        if(self::$_mock === true) {
+            return self::$_mockedCallResponses[$url][$method];
+        }
         $response = $this->client->request($method, $url, $optionsArray);
 
         if($method === self::METHOD_DELETE) {

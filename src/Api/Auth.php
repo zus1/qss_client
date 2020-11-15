@@ -12,7 +12,7 @@ class Auth extends Qss
             "password" => $password
 
         );
-        $endpoint = $this->env->get("QSS_LOGIN");
+        $endpoint = $this->env->get("QSS_LOGIN", "/api/v2/token");
         $url = $this->getBaseUrl() . $endpoint;
 
         $response = $this->callApi($url, $params, self::METHOD_POST);
