@@ -21,7 +21,7 @@ class Qss extends Call
         return $this->env->get("QSS_BASE", "https://symfony-skeleton.q-tests.com");
     }
 
-    public function callQss(string $url, ?array $params=array(), ?string $method=self::METHOD_GET) {
+    protected function callQss(string $url, ?array $params=array(), ?string $method=self::METHOD_GET) {
         $apiKey = (empty($this->tokenOverride))? $this->getApiKey() : $this->tokenOverride;
         $this->addHeader("Authorization", "Bearer " . $apiKey);
         return $this->callApi($url, $params, $method);
