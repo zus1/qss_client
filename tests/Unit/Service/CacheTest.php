@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 class CacheTest extends TestCase
 {
     public function testCache() {
+        Cache::$_mock = true;
+
         $addValue = "value";
         $addKey = "key";
         $hash = array("key1" => "value1");
@@ -26,5 +28,7 @@ class CacheTest extends TestCase
         sleep(3);
         $get = Cache::load()->get($addKey, $hash);
         $this->assertFalse($get);
+
+        Cache::$_mock = false;
     }
 }
