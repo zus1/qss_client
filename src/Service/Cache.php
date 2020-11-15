@@ -7,6 +7,8 @@ use Memcached;
 
 class Cache
 {
+    public static $_mock = false;
+
     const USER_CACHE_KEY = "cache_user_key";
     const AUTHORS_CACHE_KEY = "cache_authors_key";
     const AUTHOR_BOOKS_CACHE_KEY = "cache_author_books_key";
@@ -44,6 +46,9 @@ class Cache
     }
 
     private function getKeyWithHash(string $key, array $hash) {
+        if(self::$_mock === true) {
+            $key = sprintf("%s_mock", $key);
+        }
         if(!empty($hash)) {
             $hash = base64_encode(implode(",", $hash));
             $key = sprintf("%s_%s", $key, $hash);

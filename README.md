@@ -43,4 +43,10 @@ it is possible to check that memcached is installed and enabled by adding --memc
 <br>
 <pre><code>php bin/console app:create-author --memcached=true</code></pre>
 <br>
+<h3>Running tests</h3>
+Qss client comes with included unit and functional tests. To run them, first bash into qss_client container and then run
+<br><br>
+<pre><code>php bin/phpunit --testdox</code></pre>
+That command will first install php unit, and then run tests. Flag --testdox is just there to output each test result in console, when test is finished.
+<br><br>
 That's all she wroth, enjoy using this qss client!

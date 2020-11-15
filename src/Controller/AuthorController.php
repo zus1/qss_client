@@ -39,12 +39,10 @@ class AuthorController extends BaseController
      * @param int $authorId
      * @param Qss $qss
      * @param Author $author
-     * @param ValidatorInterface $validator
      * @return RedirectResponse|Response
      */
-    public function previewAuthor(int $authorId, Qss $qss, Author $author, ValidatorInterface $validator) {
+    public function previewAuthor(int $authorId, Qss $qss, Author $author) {
         try {
-            $this->makeValidation($validator, (new \App\Entity\Author()), "id", $authorId);
             $authorWithBooks = $qss->setCallClass($author)->authorWithBooks($authorId);
         } catch (Exception $e) {
             $this->addFlash('warning', $e->getMessage());
@@ -70,7 +68,6 @@ class AuthorController extends BaseController
      */
     public function ajaxDeleteAuthor(int $authorId, Qss $qss, Author $author, ValidatorInterface $validator) {
         try {
-            $this->makeValidation($validator, (new \App\Entity\Author()), "id", $authorId);
             $qss->setCallClass($author)->authorDelete($authorId);
         } catch (Exception $e) {
             return new JsonResponse(['error' => 1, "message" => $e->getMessage()]);

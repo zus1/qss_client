@@ -10,7 +10,7 @@ App\Entity\User:
           message: Password is required
       - Regex:
           pattern: '/^[A-Za-z0-9_@.!?:,\;+]+$/i'
-          message: Ivalid characters in password.
+          message: Invalid characters in password.
 App\Entity\Author:
   properties:
     id:
@@ -58,10 +58,10 @@ App\Entity\Book:
           message: Title is required
       - Regex:
           pattern: '/^[A-Za-z0-9 ]+$/i'
-          message: Title can only contain latters, numbers and spaces.
+          message: Title can only contain letters, numbers and spaces.
     releaseDate:
       - Date:
-          message: Release date is not valid date
+          message: Release date is not valid date.
     isbn:
       - NotBlank:
           message: Isbn is required

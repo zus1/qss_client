@@ -38,7 +38,7 @@ class Qss
 
         $user = $this->call->login($email, $password);
 
-        $this->session->set("user_email", $email);
+        $this->session->set(Authentication::USER_SESSION_KEY, $email);
         Cache::load()->set(Cache::USER_CACHE_KEY, $user, array("email" => $email), (int)Env::load()->get("QSS_USER_TTL_MIN", "60") *60);
 
         return $user;
