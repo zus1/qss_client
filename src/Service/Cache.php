@@ -18,7 +18,7 @@ class Cache
 
     private function __construct() {
         $mc = new Memcached();
-        $mc->addServer("memcached", 11211);
+        $mc->addServer(Env::load()->get("MEMCACHED_SERVER", "memcached"), 11211);
         $this->mc = $mc;
     }
 
