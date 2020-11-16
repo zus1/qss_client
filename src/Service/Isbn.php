@@ -12,7 +12,14 @@ class Isbn
         '9780683441208', '9780874644791', '9780102092837', '9789509588110', '9787663448745',
     );
 
-    public function generate(int $num=1) {
+    /**
+     *
+     * Generates array ig random isbn's
+     *
+     * @param int $num
+     * @return array
+     */
+    public function generate(int $num=1)  : array{
         $num = ($num > count($this->isbnList))? count($this->isbnList) : $num;
         $isbns = array();
         while($num > 0) {

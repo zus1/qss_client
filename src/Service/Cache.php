@@ -22,7 +22,10 @@ class Cache
         $this->mc = $mc;
     }
 
-    public static function load() {
+    /**
+     * @return Cache
+     */
+    public static function load() : Cache {
         if(empty(self::$_instance)) {
             self::$_instance = new self();
         }
@@ -30,22 +33,45 @@ class Cache
         return self::$_instance;
     }
 
-    public function set(string $key, $value, ?array $hash=array(), ?int $ttl=60) {
+    /**
+     * @param string $key
+     * @param $value
+     * @param array|null $hash
+     * @param int|null $ttl
+     */
+    public function set(string $key, $value, ?array $hash=array(), ?int $ttl=60) : void {
         $key = $this->getKeyWithHash($key, $hash);
         $this->mc->set($key, $value, $ttl);
     }
 
+    /**
+     * @param string $key
+     * @param array|null $hash
+     * @return mixed
+     */
     public function get(string $key, ?array $hash=array()) {
         $key = $this->getKeyWithHash($key, $hash);
         return $this->mc->get($key);
     }
 
-    public function delete(string $key, ?array $hash=array()) {
+    /**
+     * @param string $key
+     * @param array|null $hash
+     */
+    public function delete(string $key, ?array $hash=array()) : void {
         $key = $this->getKeyWithHash($key, $hash);
         $this->mc->delete($key);
     }
 
-    private function getKeyWithHash(string $key, array $hash) {
+    /**
+     *
+     * Adds hash to key, if any
+     *
+     * @param string $key
+     * @param array $hash
+     * @return string
+     */
+    private function getKeyWithHash(string $key, array $hash) : string {
         if(self::$_mock === true) {
             $key = sprintf("%s_mock", $key);
         }

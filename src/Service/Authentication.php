@@ -14,7 +14,10 @@ class Authentication
         $this->session = $session;
     }
 
-    public function logout() {
+    /**
+     * Deletes User from cache and removes session
+     */
+    public function logout() : void {
         $userEmail = $this->session->get(self::USER_SESSION_KEY);
         if($userEmail) {
             Cache::load()->delete(Cache::USER_CACHE_KEY, array("email" => $userEmail));
@@ -22,7 +25,13 @@ class Authentication
         }
     }
 
-    public function isAuthenticated() {
+    /**
+     *
+     * Checks if there is a authenticated user
+     *
+     * @return bool
+     */
+    public function isAuthenticated() : bool {
         $userEmail = $this->session->get(self::USER_SESSION_KEY);
         if(!$userEmail) {
             return false;
@@ -38,6 +47,12 @@ class Authentication
         return true;
     }
 
+    /**
+     *
+     * Returns currently authenticated user
+     *
+     * @return mixed|null
+     */
     public function getAuthenticatedUser() {
         if(!$this->isAuthenticated()) {
             return null;
@@ -48,7 +63,13 @@ class Authentication
         return $user;
     }
 
-    public function getAuthenticatedUserName() {
+    /**
+     *
+     * If there is authenticated user, returns his first name
+     *
+     * @return string
+     */
+    public function getAuthenticatedUserName() : string {
         $authUser = $this->getAuthenticatedUser();
         if(!empty($authUser)) {
             return $authUser->getName();
@@ -57,7 +78,13 @@ class Authentication
         return "";
     }
 
-    public function getAuthenticatedUserLastName() {
+    /**
+     *
+     * If there is authenticated user, returns his last name
+     *
+     * @return string
+     */
+    public function getAuthenticatedUserLastName() : string {
         $authUser = $this->getAuthenticatedUser();
         if(!empty($authUser)) {
             return $authUser->getLName();

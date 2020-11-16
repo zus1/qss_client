@@ -21,13 +21,13 @@ class Qss extends Call
         return $this->env->get("QSS_BASE", "https://symfony-skeleton.q-tests.com");
     }
 
-    protected function callQss(string $url, ?array $params=array(), ?string $method=self::METHOD_GET) {
+    protected function callQss(string $url, ?array $params=array(), ?string $method=self::METHOD_GET) : array {
         $apiKey = (empty($this->tokenOverride))? $this->getApiKey() : $this->tokenOverride;
         $this->addHeader("Authorization", "Bearer " . $apiKey);
         return $this->callApi($url, $params, $method);
     }
 
-    protected function getApiKey() {
+    protected function getApiKey() : string {
         if(!$this->authentication->isAuthenticated()) {
             throw new Exception("Not logged in");
         }
@@ -35,7 +35,7 @@ class Qss extends Call
         return $authenticatedUser->getToken();
     }
 
-    protected function handleError(array $response) {
+    protected function handleError(array $response) : void {
         if(isset($response["error"]) && $response["error"] === 1) {
             throw new Exception($response["message"], $response["code"]);
         }

@@ -63,10 +63,9 @@ class AuthorController extends BaseController
      * @param int $authorId
      * @param Qss $qss
      * @param Author $author
-     * @param ValidatorInterface $validator
      * @return JsonResponse
      */
-    public function ajaxDeleteAuthor(int $authorId, Qss $qss, Author $author, ValidatorInterface $validator) {
+    public function ajaxDeleteAuthor(int $authorId, Qss $qss, Author $author) : JsonResponse {
         try {
             $qss->setCallClass($author)->authorDelete($authorId);
         } catch (Exception $e) {

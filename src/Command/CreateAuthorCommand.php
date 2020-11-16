@@ -90,7 +90,7 @@ class CreateAuthorCommand extends Command
      * @param SymfonyStyle $io
      * @return User
      */
-    private function geCachedUserWithCheck(SymfonyStyle $io) {
+    private function geCachedUserWithCheck(SymfonyStyle $io) : User {
         $email = $this->askWithValidation($io, 'Enter you account email', new User(), "email", null, "Please enter email");
         $cachedUser = Cache::load()->get(Cache::USER_CACHE_KEY, array("email" => $email));
         if(empty($cachedUser)) {
@@ -100,6 +100,15 @@ class CreateAuthorCommand extends Command
         return $cachedUser;
     }
 
+    /**
+     * @param SymfonyStyle $io
+     * @param string $question
+     * @param $entity
+     * @param string $propertyForValidation
+     * @param string|null $defaultAnswer
+     * @param string|null $missingMessage
+     * @return mixed
+     */
     private function askWithValidation(SymfonyStyle $io, string $question, $entity, string $propertyForValidation, ?string $defaultAnswer="", ?string $missingMessage="") {
         return $io->ask($question, $defaultAnswer, function($answer) use($entity, $propertyForValidation, $missingMessage) {
             if(empty($answer) && $missingMessage !== "") {
@@ -111,7 +120,13 @@ class CreateAuthorCommand extends Command
         });
     }
 
-    private function makeValidation(ValidatorInterface $validator, $entity, string $name, $value) {
+    /**
+     * @param ValidatorInterface $validator
+     * @param $entity
+     * @param string $name
+     * @param $value
+     */
+    private function makeValidation(ValidatorInterface $validator, $entity, string $name, $value) : void {
         $failed = $validator->validatePropertyValue($entity, $name, $value);
         if($failed->count() > 0) {
             throw new \RuntimeException($failed->get(0)->getMessage());

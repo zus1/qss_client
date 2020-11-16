@@ -19,18 +19,28 @@ class Qss
         $this->session = $session;
     }
 
-    public function setCallClass(Call $call) {
+    /**
+     *
+     * Sets object of call class that will be used to make requests
+     *
+     * @param Call $call
+     * @return $this
+     */
+    public function setCallClass(Call $call) : Qss {
         $this->call = $call;
         return $this;
     }
 
     /**
+     *
+     * Handler fo authentication call
+     *
      * @param string $email
      * @param string $password
      * @return User
      * @throws Exception
      */
-    public function authenticateUser(string $email, string $password) {
+    public function authenticateUser(string $email, string $password) : User {
         $user = Cache::load()->get(Cache::USER_CACHE_KEY, array("email" => $email));
         if(!empty($user)) {
             throw new Exception("Already logged in");
@@ -44,7 +54,13 @@ class Qss
         return $user;
     }
 
-    public function authors() {
+    /**
+     *
+     * Handles authors list call
+     *
+     * @return array
+     */
+    public function authors() : array {
         $authors = Cache::load()->get(Cache::AUTHORS_CACHE_KEY);
         if(!empty($authors)) {
             return $authors;
@@ -56,7 +72,14 @@ class Qss
         return $authors;
     }
 
-    public function authorWithBooks(int $authorId) {
+    /**
+     *
+     * Handles author with book call
+     *
+     * @param int $authorId
+     * @return array
+     */
+    public function authorWithBooks(int $authorId) : array {
         $authorWithBooks = Cache::load()->get(Cache::AUTHOR_BOOKS_CACHE_KEY, array("author_id" => $authorId));
         if(!empty($authorWithBooks)) {
             return $authorWithBooks;
@@ -69,27 +92,60 @@ class Qss
         return $authorWithBooks;
     }
 
-    public function authorDelete(int $authorId) {
+    /**
+     *
+     * Handles author delete call
+     *
+     * @param int $authorId
+     */
+    public function authorDelete(int $authorId) : void {
         $this->call->deleteAuthor($authorId);
         Cache::load()->delete(Cache::AUTHORS_CACHE_KEY);
     }
 
-    public function authorAdd(Author $author) {
+    /**
+     *
+     * Handles add author call
+     *
+     * @param Author $author
+     */
+    public function authorAdd(Author $author) : void {
         $this->call->addAuthor($author);
         Cache::load()->delete(Cache::AUTHORS_CACHE_KEY);
     }
 
-    public function bookAdd(int $authorId, Book $book) {
+    /**
+     *
+     * Handles add book call
+     *
+     * @param int $authorId
+     * @param Book $book
+     */
+    public function bookAdd(int $authorId, Book $book) : void {
         $this->call->addBook($authorId, $book);
         Cache::load()->delete(Cache::AUTHOR_BOOKS_CACHE_KEY, array("author_id" => $authorId));
     }
 
-    public function bookDelete(int $bookId, int $authorId) {
+    /**
+     *
+     * Handles delete book call
+     *
+     * @param int $bookId
+     * @param int $authorId
+     */
+    public function bookDelete(int $bookId, int $authorId) : void {
         $this->call->deleteBook($bookId);
         Cache::load()->delete(Cache::AUTHOR_BOOKS_CACHE_KEY, array("author_id" => $authorId));
     }
 
-    public function addNumberOfBooksForAuthors(array $authors) {
+    /**
+     *
+     * Adds value of total authors books, to Author objects
+     *
+     * @param array $authors
+     * @return array
+     */
+    public function addNumberOfBooksForAuthors(array $authors) : array {
         array_walk($authors, function (Author $author) {
            $withBooks = $this->authorWithBooks($author->getId());
            $author->setNumberOfBooks(count($withBooks["books"]));

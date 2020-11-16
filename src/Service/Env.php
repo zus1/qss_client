@@ -14,7 +14,10 @@ class Env
         $dotenv->load(dirname(dirname(__DIR__)) . "/.env");
     }
 
-    public static function load() {
+    /**
+     * @return Env
+     */
+    public static function load(): Env {
         if(empty(self::$_instance)) {
             self::$_instance = new self();
         }
@@ -22,6 +25,11 @@ class Env
         return self::$_instance;
     }
 
+    /**
+     * @param string $key
+     * @param string|null $default
+     * @return mixed|string
+     */
     public function get(string $key, ?string $default="") {
         if(isset($_ENV[$key])) {
             return $_ENV[$key];
