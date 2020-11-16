@@ -16,7 +16,10 @@ class Package
     const PACKAGE_AUTHOR_BOOKS = "author-books";
     const PACKAGE_USER = "user";
 
-    private function packageToMethodMapping() {
+    /**
+     * @return array
+     */
+    private function packageToMethodMapping() : array {
         return array(
             self::PACKAGE_AUTHOR => "packageAuthor",
             self::PACKAGE_BOOK => "packageBook",
@@ -26,6 +29,15 @@ class Package
         );
     }
 
+    /**
+     *
+     * Package api response values to entity objects
+     *
+     * @param string $packageType
+     * @param array $unpacked
+     * @return mixed
+     * @throws Exception
+     */
     public function package(string $packageType, array $unpacked) {
         if(!array_key_exists($packageType, $this->packageToMethodMapping())) {
             throw new Exception("Invalid package");
@@ -34,7 +46,12 @@ class Package
         return call_user_func_array(array($this, $this->packageToMethodMapping()[$packageType]), array($unpacked));
     }
 
-    private function packageAuthorsWithBooks(array $response) {
+    /**
+     * @param array $response
+     * @return array
+     * @throws Exception
+     */
+    private function packageAuthorsWithBooks(array $response) : array {
         $package = array(
             "author" => $this->packageAuthor($response),
             "books" => array()
@@ -47,7 +64,11 @@ class Package
         return $package;
     }
 
-    private function packageAuthors(array $response) {
+    /**
+     * @param array $response
+     * @return array
+     */
+    private function packageAuthors(array $response) : array {
         $package = array();
         array_walk($response, function (array $authorArr) use (&$package) {
             $package[] = $this->packageAuthor($authorArr);
@@ -56,7 +77,12 @@ class Package
         return $package;
     }
 
-    private function packageAuthor(array $authorArr) {
+    /**
+     * @param array $authorArr
+     * @return Author
+     * @throws Exception
+     */
+    private function packageAuthor(array $authorArr) : Author {
         $author = new Author();
         $author->setId($authorArr["id"]);
         $author->setName($authorArr["first_name"]);
@@ -68,7 +94,12 @@ class Package
         return $author;
     }
 
-    private function packageBook(array $bookArr) {
+    /**
+     * @param array $bookArr
+     * @return Book
+     * @throws Exception
+     */
+    private function packageBook(array $bookArr) : Book {
         $book = new Book();
         $book->setId($bookArr["id"]);
         $book->setTitle($bookArr["title"]);
@@ -82,7 +113,11 @@ class Package
         return $book;
     }
 
-    private function packageUser(array $response) {
+    /**
+     * @param array $response
+     * @return User
+     */
+    private function packageUser(array $response) : User {
         $user = new User();
         $user->setName($response["user"]["first_name"]);
         $user->setLName($response["user"]["last_name"]);

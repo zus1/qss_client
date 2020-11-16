@@ -17,7 +17,7 @@ class BaseController extends AbstractController {
      * @param Authentication $auth
      * @return RedirectResponse
      */
-    public function root(Authentication $auth) {
+    public function root(Authentication $auth) : RedirectResponse {
         if($auth->isAuthenticated()) {
             return $this->redirectToRoute("author_list");
         }
@@ -25,7 +25,14 @@ class BaseController extends AbstractController {
         return $this->redirectToRoute("login");
     }
 
-    protected function makeValidation(ValidatorInterface $validator, $entity, string $name, $value) {
+    /**
+     * @param ValidatorInterface $validator
+     * @param $entity
+     * @param string $name
+     * @param $value
+     * @throws Exception
+     */
+    protected function makeValidation(ValidatorInterface $validator, $entity, string $name, $value) : void {
         $failed = $validator->validatePropertyValue($entity, $name, $value);
         if($failed->count() > 0) {
             throw new Exception($failed->get(0)->getMessage());

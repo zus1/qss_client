@@ -2,11 +2,12 @@
 
 namespace App\Api;
 
+use App\Entity\User;
 use App\Service\Package;
 
 class Auth extends Qss
 {
-    public function login(string $email, string $password) {
+    public function login(string $email, string $password) : User {
         $params = array(
             'email' => $email,
             "password" => $password

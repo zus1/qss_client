@@ -56,7 +56,7 @@ class AuthController extends BaseController
      * @param Authentication $auth
      * @return RedirectResponse
      */
-    public function logout(Authentication $auth) {
+    public function logout(Authentication $auth) : RedirectResponse {
         $authenticated = $auth->isAuthenticated();
         if($authenticated === true) {
             $auth->logout();
